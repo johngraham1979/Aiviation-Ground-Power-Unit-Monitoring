@@ -1,4 +1,4 @@
--- This Project --
+-- Some key concepts --
 
 # Aiviation-Ground-Power-Units
 # AXA 
@@ -6,23 +6,23 @@
 # AXA3400 COMPACT
 # Three Phase
 # Frequency modulation
-# Stable output voltages and currents.
+# Stable output voltages and currents
 
 # Remote monitoring
 # Remote information
-# Remote warnings.
+# Remote warnings
 
 # standard layouts
 # standard technology
 
--- MY Skills --
+-- Some Skills --
 # C+
 # Java
 # WPF
 # XAML
 # c++
 # Proto-types
-# Tools and products that can help all industrstries who deal with Modbus devices.
+# Tools and products that can help all industrstries who deal with Modbus devices
 # PCL interfacing
 # microcontroller assenbly and programming
 # micro-computer assembly and programming
