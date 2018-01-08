@@ -39,6 +39,6 @@ I am in the process of implementing examination and monitoring tools that can be
 
 I and quickly prototyping and producing useful tools and applications that will be available and reliable in the coming weeks and months.
 
-If you are interested in infomation about my interests, activities, services or productsW: My name is John Graham, and an email address of mine in datasemantics@outlook.co.nz.
+If you are interested in infomation about my interests, activities, services or products: My name is John Graham, and an email address of mine in datasemantics@outlook.co.nz.
 
 Once again, my name is John Gaham, an I'm pleased to meet you.
