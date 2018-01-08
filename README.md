@@ -20,7 +20,7 @@
 # Java
 # WPF
 # XAML
-# c++
+# c#
 # Proto-types
 # Tools and products that can help all industrstries who deal with Modbus devices
 # PCL interfacing
