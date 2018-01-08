@@ -1,0 +1,57 @@
+<Window x:Class="AXARemote.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:AXARemote.ViewModel"
+        xmlns:userControl="clr-namespace:AXARemote.View.UserControl"
+        mc:Ignorable="d"
+        Title="Airspec Ltd Modbus Unit Communicator" SizeToContent="Width"
+        Icon="pack://application:,,,/AXARemote;component/Image/ASlogo.png" x:Name="MainApplicationWindow">
+
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AXARemote;component/Style/ButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:MultiPhaseViewModel}">
+                <userControl:MultiPhaseView DataContext="{Binding}" />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:NewPageViewModel}">
+                <userControl:NewPage DataContext="{Binding}" />
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Name="MainWindowGrid">
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="NavigationButtonsColumn" Width="200" />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Vertical">
+            <Button Style="{StaticResource NavigationButton}" Content="Radial Gauges Example"
+                    Click="DataVisualisationView_ButtonClicked" />
+            <Button Style="{StaticResource NavigationButton}" Content="Bar Gauge Example"
+                    Click="ButtonBase_OnClick" />
+            <Button Style="{StaticResource NavigationButton}" Content="Example Button" />
+        </StackPanel>
+
+        <Image Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"
+               Source="pack://application:,,,/AXARemote;component/Image/axa.png" />
+        <ContentControl Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="3" Content="{Binding}" />
+    </Grid>
+</Window>

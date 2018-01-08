@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="AXARemote.View.UserControl.ChartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+
+             xmlns:primitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             xmlns:control="clr-namespace:AXARemote.Control"
+             xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             mc:Ignorable="d"
+             Background="White" x:Name="ChartUserControl">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AXARemote;component/Style/ButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer x:Name="ChartView0ScrollViewer" MaxWidth="{Binding ElementName=ChartUserControl, Path=ActualWidth}"
+                  Width="{Binding ElementName=MultiPhaseUserControl, Path=ActualWidth}"
+                  HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
+
+        <control:Chart x:Name="Chart">
+
+            <control:Chart.Template>
+                <ControlTemplate TargetType="{x:Type control:Chart}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="Transparent"
+                            BorderThickness="{TemplateBinding BorderThickness}" Padding="10">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="0" />
+                            </Grid.ColumnDefinitions>
+
+                            <primitives:EdgePanel Grid.Column="0" x:Name="ChartArea"
+                                                  Style="{TemplateBinding ChartAreaStyle}">
+                                <Grid Canvas.ZIndex="-1" Style="{x:Null}" />
+                            </primitives:EdgePanel>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+
+
+            </control:Chart.Template>
+
+
+            <control:LineSeries x:Name="LineSeries0" IndependentValueBinding="{Binding Key}"
+                                DependentValueBinding="{Binding Value}" />
+
+            <control:LineSeries x:Name="LineSeries1" IndependentValueBinding="{Binding Key}"
+                                DependentValueBinding="{Binding Value}" />
+
+            <control:LineSeries x:Name="LineSeries2" IndependentValueBinding="{Binding Key}"
+                                DependentValueBinding="{Binding Value}" />
+
+            <control:Chart.Axes>
+                <control:LinearAxis Orientation="Y" Maximum="61" Minimum="-1" ShowGridLines="True" />
+            </control:Chart.Axes>
+        </control:Chart>
+
+    </ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,325 @@
+﻿<UserControl x:Class="AXARemote.View.UserControl.GaugeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:agc="http://www.arction.com/gauges/"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:viewModel="clr-namespace:AXARemote.ViewModel"
+             xmlns:control="clr-namespace:AXARemote.Control"
+             mc:Ignorable="d" Background="White" x:Name="GaugeUserControl" Margin="5">
+
+    <UserControl.DataContext>
+        <viewModel:GaugeViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AXARemote;component/Style/ButtonStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AXARemote;component/Style/ExpanderStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AXARemote;component/Style/ComboboxStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <GridLength x:Key="RowHeight">40</GridLength>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="PhasePowerDictionary" Height="{StaticResource RowHeight}" />
+            <RowDefinition x:Name="HiddenSettings" Height="{StaticResource RowHeight}" />
+            <RowDefinition x:Name="GaugeAnimation" Height="{Binding ElementName=Gauge, Path=Height, Mode=OneWay}" />
+            <RowDefinition x:Name="Gap" Height="{StaticResource RowHeight}" />
+            <RowDefinition x:Name="Buttons" Height="{Binding ElementName=StartButton, Path=Height}" />
+            <RowDefinition x:Name="TestButton" Height="{Binding ElementName=StartButton, Path=Height}" />
+        </Grid.RowDefinitions>
+
+        <!-- 0th Row (of UserControl): Dictionary of measurements -->
+        <Grid Grid.Row="0">
+            <ComboBox x:Name="MeasurementComboBox" ItemsSource="{Binding Axa2400PhasePowerDictionary}"
+                      DisplayMemberPath="Item1"
+                      SelectedItem="{Binding PowerDictionarySelection}" />
+            <TextBlock Text="Select Measurement" VerticalAlignment="Center" Margin="25 0 0 0" Foreground="Gray"
+                       Background="Transparent"
+                       IsHitTestVisible="False">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=MeasurementComboBox, Path=SelectedItem}"
+                                         Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
+        <!-- 1st Row (of UserControl): Expander of low-level settings -->
+        <Canvas ZIndex="1000" Grid.Row="1">
+            <Expander ExpandDirection="Down" Style="{StaticResource ExpanderStyle}">
+
+                <Expander.Header>
+                    <Grid>
+                        <TextBlock Text="Manual Settings" Foreground="Gray" />
+                    </Grid>
+                </Expander.Header>
+
+
+                <Grid Width="{Binding ElementName=GaugeUserControl, Path=ActualWidth}" Background="#EEE">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                        <RowDefinition Height="{StaticResource RowHeight}" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 0th Row (of expander): Modbus Function -->
+                    <Label Grid.Column="0" Grid.Row="0" Content="Function" VerticalAlignment="Center"
+                           Target="{Binding ElementName=FunctionCode}">
+                        <Label.Style>
+                            <Style TargetType="{x:Type Label}">
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=FunctionCode, Path=Text}" Value="">
+                                        <Setter Property="FontWeight" Value="Normal" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=StartButton, Path=IsMouseOver}"
+                                                 Value="True">
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox Grid.Column="1" Grid.Row="0" x:Name="FunctionCode" Margin="0 0 1 0"
+                              ToolTip="Modbus protocol function code." ItemsSource="{Binding FunctionCodes}"
+                              DisplayMemberPath="Item1" SelectedItem="{Binding FunctionCodeSelection}">
+                        <ComboBox.Style>
+                            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartButton, Path=IsMouseOver}"
+                                                 Value="True">
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+
+                    <!-- 1st Row : Blank -->
+
+                    <!-- 2nd Row (of expander): Modbus Register Address (in Decimal) -->
+                    <Label Grid.Row="2" Grid.Column="0" x:Name="RegisterAddressLabel" Content="Address"
+                           VerticalAlignment="Center"
+                           Target="{Binding ElementName=RegisterAddress}">
+                        <Label.Style>
+                            <Style TargetType="{x:Type Label}">
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartButton, Path=IsMouseOver}"
+                                                 Value="True">
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=RegisterAddress, Path=Text}" Value="">
+                                        <Setter Property="FontWeight" Value="Normal" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="RegisterAddress"
+                             ToolTip="Modbus register address (in decimal)."
+                             HorizontalContentAlignment="Right"
+                             Margin="0 0 1 0"
+                             Text="{Binding RegisterAddress, Mode=TwoWay}"
+                             VerticalContentAlignment="Center">
+                        <TextBox.Style>
+                            <Style TargetType="{x:Type TextBox}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartButton, Path=IsMouseOver}"
+                                                 Value="True">
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+
+                    <!-- 3rd Row (of expander): Scaling factor -->
+                    <Label Grid.Column="0" Grid.Row="3" Content="Scale" Target="{Binding ElementName=ScalingFactor}"
+                           VerticalAlignment="Center">
+                        <Label.Style>
+                            <Style TargetType="{x:Type Label}">
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=ScalingFactor, Path=Value}" Value="1">
+                                        <Setter Property="FontWeight" Value="Normal" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=StartButton, Path=IsMouseOver}"
+                                                 Value="True">
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+
+                    <xctk:DoubleUpDown Grid.Column="1" Grid.Row="3" x:Name="ScalingFactor" ToolTip="Scaling factor."
+                                       Increment="0.01" Value="1"
+                                       Minimum="0.1"
+                                       Text="{Binding ScalingFactor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                       VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                                       HorizontalAlignment="Stretch">
+                        <xctk:DoubleUpDown.Style>
+                            <Style TargetType="{x:Type xctk:DoubleUpDown}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartButton, Path=IsMouseOver}"
+                                                 Value="True">
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </xctk:DoubleUpDown.Style>
+                    </xctk:DoubleUpDown>
+
+                    <!-- 4th Row : Blank -->
+
+                    <!-- 5th Row (of expander): Polling Rate -->
+                    <Label Grid.Column="0" Grid.Row="5" Content="Poll Rate" Target="{Binding ElementName=PollRate}"
+                           VerticalAlignment="Center" />
+                    <xctk:DoubleUpDown Grid.Column="1" Grid.Row="5" x:Name="PollRate"
+                                       Minimum="0.5"
+                                       ToolTip="Polls of modbus register per second."
+                                       Increment="0.1"
+                                       Value="1"
+                                       Text="{Binding PollRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N1}"
+                                       VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                                       HorizontalAlignment="Stretch" />
+
+                    <!-- 6th Row : Blank -->
+
+                    <!-- 7th Row (of expander): Number of minor tick marks -->
+                    <Label Grid.Column="0" Grid.Row="7" Content="Min. Ticks" VerticalAlignment="Center"
+                           Target="{Binding ElementName=MinorTickCount}" />
+                    <xctk:IntegerUpDown x:Name="MinorTickCount" Grid.Column="1" Grid.Row="7"
+                                        Value="{Binding ElementName=GaugeScale, Path=MinorTickCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Minimum="0" />
+
+                    <!-- 8th Row (of expander): Number of major tick marks -->
+                    <Label Grid.Column="0" Grid.Row="8" Content="Maj. Ticks" VerticalAlignment="Center"
+                           Target="{Binding ElementName=MajorTickCount}" />
+                    <xctk:IntegerUpDown x:Name="MajorTickCount" Grid.Column="1" Grid.Row="8"
+                                        Value="{Binding ElementName=GaugeScale, Path=MajorTickCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Minimum="2" />
+
+                    <Label Grid.Column="0" Grid.Row="9" x:Name="MinValueLabel" Content="Min. Value"
+                           VerticalAlignment="Center" Target="{Binding ElementName=MinValue}" />
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="9" x:Name="MinValue"
+                                        Value="{Binding ElementName=GaugeScale, Path=RangeBegin}" />
+
+                    <Label Grid.Column="0" Grid.Row="10" Content="Max. Value" x:Name="MaxValueLabel"
+                           VerticalAlignment="Center" Target="{Binding ElementName=MaxValue}" />
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="10" x:Name="MaxValue" Minimum="1"
+                                        Value="{Binding ElementName=GaugeScale, Path=RangeEnd}" />
+                </Grid>
+
+            </Expander>
+        </Canvas>
+
+        <!-- 2nd Row (of UserControl): Circular gauge -->
+        <agc:Gauge x:Name="Gauge" Grid.Row="2" ArcPadding="0" StrokeThickness="1" FontSize="12" Height="200">
+            <agc:Gauge.PrimaryScale>
+                <agc:Scale x:Name="GaugeScale" Value="{Binding GaugeValue}" MajorTickCount="7" RangeBegin="0"
+                           RangeEnd="60" Label="" />
+            </agc:Gauge.PrimaryScale>
+        </agc:Gauge>
+
+
+        <CheckBox Grid.Row="3" Content="Plot Data" VerticalAlignment="Center"
+                  IsChecked="{Binding Plotting, Mode=TwoWay, NotifyOnSourceUpdated=True}" Margin="10" />
+
+        <Grid x:Name="StartStopButtons" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <control:Button Grid.Column="0" x:Name="StartButton" Content="Start"
+                            IsOn="{Binding IsRunning}" Command="{Binding StartCommand}">
+                <control:Button.Style>
+                    <Style TargetType="{x:Type control:Button}" BasedOn="{StaticResource NavigationButton}">
+                        <Style.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsOn" Value="False" />
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="LightGreen" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsOn" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="LightGreen" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsOn" Value="False" />
+                                    <Condition Property="IsPressed" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="Green" />
+                            </MultiTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </control:Button.Style>
+            </control:Button>
+            <control:Button Grid.Column="1" x:Name="StopButton" Content="Stop" IsOn="{Binding IsRunning}"
+                            Command="{Binding StopCommand}">
+                <control:Button.Style>
+                    <Style TargetType="{x:Type control:Button}" BasedOn="{StaticResource NavigationButton}">
+                        <Style.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsOn" Value="True" />
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="LightPink" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsOn" Value="True" />
+                                    <Condition Property="IsPressed" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="LightCoral" />
+                            </MultiTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </control:Button.Style>
+            </control:Button>
+        </Grid>
+
+        <control:Button Grid.Row="5" Content="Clear Plot Data" IsOn="{Binding IsRunning}"
+                        Command="{Binding ClearPlotCommand}">
+            <control:Button.Style>
+                <Style TargetType="{x:Type control:Button}" BasedOn="{StaticResource NavigationButton}" />
+            </control:Button.Style>
+        </control:Button>
+
+    </Grid>
+</UserControl>
